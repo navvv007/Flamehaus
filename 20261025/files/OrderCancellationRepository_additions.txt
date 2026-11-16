@@ -1,0 +1,3 @@
+Add this method to your existing OrderCancellationRepository.java if missing:
+
+    List<OrderCancellation> findAllByOrderByCreatedAtDesc();

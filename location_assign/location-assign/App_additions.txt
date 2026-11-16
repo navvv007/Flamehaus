@@ -1,0 +1,10 @@
+Add to App.jsx:
+
+1. Import:
+   import AdminDeliveryMap from "./admin/pages/AdminDeliveryMap";
+
+2. Inside /admin routes:
+   <Route path="delivery/map" element={<AdminDeliveryMap />} />
+
+3. Add to AdminLayout.jsx navItems (under Delivery Orders):
+   { to: "/admin/delivery/map", label: "Live Map", icon: "🗺" }

@@ -1,0 +1,19 @@
+Add these methods to your JwtUtil.java if they don't already exist:
+
+    public Claims extractAllClaims(String token) {
+        return Jwts.parser()
+                .verifyWith(getSigningKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+    }
+
+    public Long extractCustomerId(String token) {
+        try {
+            Claims claims = extractAllClaims(token);
+            Object cid = claims.get("customerId");
+            return cid != null ? Long.parseLong(cid.toString()) : null;
+        } catch (Exception e) {
+            return null;
+        }
+    }

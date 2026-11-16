@@ -1,0 +1,14 @@
+1. Add to AdminLayout.jsx navItems array:
+   { to: "/admin/timeout-orders", label: "Timeout Monitor", icon: "⏱" }
+
+2. Add to App.jsx imports:
+   import AdminTimeoutOrders from "./admin/pages/AdminTimeoutOrders";
+
+3. Add to App.jsx inside /admin routes:
+   <Route path="timeout-orders" element={<AdminTimeoutOrders />} />
+
+4. In OrderDetail.jsx (website), add TimeoutBanner:
+   import TimeoutBanner from "../components/TimeoutBanner";
+   // Inside the page, after fetching order + assignment:
+   <TimeoutBanner assignedAt={assignment?.assignedAt} />
+   // Show only when order status is On the Way / PICKED_UP

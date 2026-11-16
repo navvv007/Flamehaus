@@ -1,0 +1,31 @@
+# Node.js and Vite
+node_modules/
+dist/
+dist-ssr/
+coverage/
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+*.local
+
+# Java and Maven
+target/
+*.class
+
+# Local environment and credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+/flamehaus-backend/flamehaus-backend/src/main/resources/application.properties
+
+# IDE and operating system files
+.idea/
+.vscode/*
+!.vscode/extensions.json
+.DS_Store
+Thumbs.db

@@ -1,0 +1,33 @@
+Common repository method name errors after Order entity changes.
+Find and fix these in your repository files:
+
+=== OrderRepository.java ===
+If you have any of these — remove or replace them:
+
+BROKEN (field no longer exists on Order):
+  findByCustomer(Customer c)                     → replace with: findByCustomerId(Long id)
+  findByCustomerOrderByCreatedAtDesc(Customer c) → replace with: findByCustomerIdOrderByCreatedAtDesc(Long id)
+  countByCustomer(Customer c)                    → replace with: countByCustomerId(Long id)
+  findByCustomerAndStatus(Customer c, String s)  → replace with: findByCustomerIdAndStatus(Long id, String s)
+
+CORRECT versions to use:
+  List<Order> findByCustomerIdOrderByCreatedAtDesc(Long customerId);
+  List<Order> findByCustomerIdAndStatus(Long customerId, String status);
+  long countByCustomerId(Long customerId);
+  long countByStatus(String status);
+  List<Order> findAllByOrderByCreatedAtDesc();
+  Optional<Order> findById(Long id);
+
+  @Query("SELECT o FROM Order o WHERE o.status = 'Preparing' " +
+         "AND NOT EXISTS (SELECT a FROM DeliveryAssignment a " +
+         "WHERE a.order.id = o.id AND a.status IN ('ASSIGNED','ACCEPTED','PICKED_UP'))")
+  List<Order> findUnassignedPreparingOrders();
+
+=== CancellationService / OrderService / PaymentService ===
+If they call order.getCustomer() and need the customer phone/email,
+use the customerId to look up the customer separately:
+
+  // Instead of: order.getCustomer().getPhone()
+  // Use: customerRepo.findById(order.getCustomerId()).map(Customer::getPhone).orElse("")
+  // OR:  order.getCustomerPhone()  (already on Order entity)
+

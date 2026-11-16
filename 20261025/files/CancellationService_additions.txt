@@ -1,0 +1,45 @@
+Add these two methods to your existing CancellationService.java
+(before the last closing brace):
+
+    /**
+     * Called by AdminOrderController.cancel() to trigger refund.
+     * Checks if payment exists and is in PAID status, then refunds.
+     */
+    public void processRefundForOrder(Long orderId) {
+        paymentRepo.findByOrderId(orderId).ifPresent(payment -> {
+            if (!"PAID".equals(payment.getStatus())) return;
+            try {
+                if ("RAZORPAY".equals(payment.getGateway())) {
+                    RazorpayClient client = new RazorpayClient(razorpayKeyId, razorpayKeySecret);
+                    org.json.JSONObject opts = new org.json.JSONObject();
+                    opts.put("speed", "normal");
+                    client.payments.refund(payment.getGatewayPaymentId(), opts);
+                } else if ("STRIPE".equals(payment.getGateway())) {
+                    com.stripe.Stripe.apiKey = stripeSecretKey;
+                    com.stripe.model.Refund.create(
+                        com.stripe.param.RefundCreateParams.builder()
+                            .setPaymentIntent(payment.getGatewayPaymentId())
+                            .build());
+                }
+                payment.setStatus("REFUNDED");
+                paymentRepo.save(payment);
+                System.out.println("[REFUND] Order #" + orderId + " refunded via " + payment.getGateway());
+            } catch (Exception e) {
+                System.err.println("[REFUND-ERROR] Order #" + orderId + ": " + e.getMessage());
+                payment.setStatus("REFUND_PENDING");
+                paymentRepo.save(payment);
+            }
+        });
+    }
+
+    /**
+     * Returns all cancellations ordered by most recent first.
+     */
+    public List<OrderCancellation> getAllCancellations() {
+        return cancellationRepo.findAllByOrderByCreatedAtDesc();
+    }
+
+--- Also add these imports at the top of CancellationService.java if missing: ---
+
+import com.razorpay.RazorpayClient;
+import java.util.List;

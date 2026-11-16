@@ -1,0 +1,12 @@
+Add these lines to SecurityConfig.java BEFORE .anyRequest().authenticated():
+
+// Coupons - public
+.requestMatchers(HttpMethod.GET,  "/api/coupons/active").permitAll()
+.requestMatchers(HttpMethod.POST, "/api/coupons/validate").permitAll()
+.requestMatchers(HttpMethod.POST, "/api/coupons/apply").permitAll()
+// Coupons - admin
+.requestMatchers(HttpMethod.GET,    "/api/admin/coupons").hasRole("ADMIN")
+.requestMatchers(HttpMethod.POST,   "/api/admin/coupons").hasRole("SUPERADMIN")
+.requestMatchers(HttpMethod.PUT,    "/api/admin/coupons/**").hasRole("SUPERADMIN")
+.requestMatchers(HttpMethod.PATCH,  "/api/admin/coupons/**").hasRole("SUPERADMIN")
+.requestMatchers(HttpMethod.DELETE, "/api/admin/coupons/**").hasRole("SUPERADMIN")

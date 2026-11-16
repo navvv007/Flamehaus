@@ -1,0 +1,9 @@
+Add these lines to SecurityConfig.java inside the authorizeHttpRequests block,
+BEFORE the .anyRequest().authenticated() line:
+
+// ── Cancellation endpoints ─────────────────────────────────────────────────
+.requestMatchers(HttpMethod.POST, "/api/customer/orders/*/cancel").hasRole("CUSTOMER")
+.requestMatchers(HttpMethod.GET,  "/api/customer/orders/*/cancellation").hasRole("CUSTOMER")
+.requestMatchers(HttpMethod.POST, "/api/admin/orders/*/cancel").hasRole("ADMIN")
+.requestMatchers(HttpMethod.GET,  "/api/admin/cancellations").hasRole("ADMIN")
+.requestMatchers(HttpMethod.GET,  "/api/admin/orders/*/cancellation").hasRole("ADMIN")

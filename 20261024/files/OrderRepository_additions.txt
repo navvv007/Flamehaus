@@ -1,0 +1,13 @@
+Add these methods to your existing OrderRepository.java if not already present:
+
+    // Used by AdminOrderController.listAll()
+    List<Order> findAllByOrderByCreatedAtDesc();
+
+    // Used by AdminOrderController.stats()
+    long countByStatus(String status);
+
+    // Used by DeliveryService.assignPendingOrdersToNewlyOnlinePartner()
+    @Query("SELECT o FROM Order o WHERE o.status = 'Preparing' " +
+           "AND NOT EXISTS (SELECT a FROM DeliveryAssignment a " +
+           "WHERE a.order.id = o.id AND a.status IN ('ASSIGNED','ACCEPTED','PICKED_UP'))")
+    List<Order> findUnassignedPreparingOrders();

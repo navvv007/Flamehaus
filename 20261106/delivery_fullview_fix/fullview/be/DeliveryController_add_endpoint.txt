@@ -1,0 +1,24 @@
+ADD this method inside DeliveryController.java (anywhere in the "Partner" section,
+next to the other @GetMapping("/partner/assignments") method):
+
+    /** Partner views ONE of their own assignments (used by the Full View page). */
+    @GetMapping("/partner/assignments/{id}")
+    public ResponseEntity<?> myAssignment(@PathVariable Long id, Authentication auth) {
+        Long partnerId = extractPartnerId(auth);
+        if (partnerId == null) return unauthorized();
+        try {
+            return ResponseEntity.ok(deliveryService.getAssignmentForPartner(id, partnerId));
+        } catch (RuntimeException e) {
+            boolean denied = "Access denied".equals(e.getMessage());
+            return ResponseEntity.status(denied ? 403 : 404)
+                    .body(Map.of("error", e.getMessage()));
+        }
+    }
+
+Notes
+- No new imports needed (ResponseEntity, Authentication, Map are already imported).
+- It only returns the assignment if it belongs to the logged-in partner (403 otherwise).
+- SecurityConfig already covers it: /api/delivery/partner/** requires ROLE_DELIVERY.
+- If compile says getAssignmentForPartner is private in DeliveryService, change it to public.
+- If startup says "Ambiguous mapping ... /partner/assignments/{id}", you already have this
+  endpoint - delete one of the two.

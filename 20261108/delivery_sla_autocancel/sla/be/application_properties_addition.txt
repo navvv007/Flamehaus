@@ -1,0 +1,18 @@
+# ── Add to src/main/resources/application.properties ──────────────────────────
+
+# Delivery SLA: cancel + refund if not delivered this many minutes after assignment.
+app.delivery.timeout-minutes=120
+# Customer/admin screens start warning this many minutes before the deadline.
+app.delivery.warning-minutes=30
+# How often the check runs (milliseconds).
+app.delivery.check-interval-ms=60000
+
+# For TESTING set the first line to 2 and restart, then assign an order and wait ~3 min.
+# Put it back to 120 afterwards.
+
+# ── Refunds need these three keys. They must match the names your PaymentService uses.
+# If a name differs, refunds will fail with "keys not configured" and show as
+# "Refund failed" / REFUND_PENDING on the admin screen (they are not lost - you can retry).
+#   razorpay.key.id=...
+#   razorpay.key.secret=...
+#   stripe.secret.key=...

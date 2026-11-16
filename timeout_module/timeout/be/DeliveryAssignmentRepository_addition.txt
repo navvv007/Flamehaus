@@ -1,0 +1,9 @@
+Add this method to DeliveryAssignmentRepository.java if not already present:
+
+    import java.time.LocalDateTime;  // add to imports
+
+    @Query("SELECT a FROM DeliveryAssignment a " +
+           "WHERE a.status IN :statuses AND a.assignedAt < :cutoff")
+    List<DeliveryAssignment> findByStatusInAndAssignedAtBefore(
+        @Param("statuses") List<String> statuses,
+        @Param("cutoff")   LocalDateTime cutoff);

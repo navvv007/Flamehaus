@@ -1,0 +1,18 @@
+Add this endpoint to your AdminOrderController.java
+(needed for the admin panel to set arbitrary status):
+
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<?> setStatus(@PathVariable Long id,
+                                        @RequestBody Map<String, String> body) {
+        try {
+            String status = body.get("status");
+            Order order = orderRepo.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Order not found"));
+            order.setStatus(status);
+            order.setUpdatedAt(LocalDateTime.now());
+            orderRepo.save(order);
+            return ResponseEntity.ok(order);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
+    }

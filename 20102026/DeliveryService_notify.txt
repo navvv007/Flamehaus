@@ -1,0 +1,9 @@
+Add this private method to DeliveryService.java
+(anywhere before the closing brace of the class):
+
+    private void notifyAdminNoPartner(Long orderId) {
+        System.out.println("[ALERT] Order #" + orderId +
+            " has no available delivery partner after " + MAX_REASSIGN +
+            " rejections. Manual assignment required.");
+        // Optional: send admin SMS/email here
+    }

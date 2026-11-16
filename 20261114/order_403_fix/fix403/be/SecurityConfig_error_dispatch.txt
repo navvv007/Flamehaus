@@ -1,0 +1,17 @@
+SecurityConfig.java  -  make real errors visible
+================================================
+In src/main/java/com/flamehaus/api/config/SecurityConfig.java, inside .authorizeHttpRequests(...),
+add ONE line directly after the OPTIONS rule:
+
+    .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+    .requestMatchers("/error").permitAll()                    // <-- ADD THIS
+
+Why: Spring Security 6 also guards Spring's internal /error page. When any controller fails
+unexpectedly, the error is forwarded to /error, gets blocked, and the browser sees "403"
+instead of the real 500. With this line, failures show up as what they really are, and the
+backend console prints the stack trace.
+
+Also confirm these two public rules exist in the same block (add if missing):
+
+    .requestMatchers(HttpMethod.POST, "/api/orders").permitAll()
+    .requestMatchers(HttpMethod.GET,  "/api/orders/*/track").permitAll()

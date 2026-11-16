@@ -1,0 +1,42 @@
+Add these two methods to your existing JwtUtil.java
+(find the class, add before the last closing brace):
+
+    // ── Extract customerId from CUSTOMER token ────────────────────────────────
+
+    public Long extractCustomerId(String token) {
+        try {
+            // jjwt 0.12.x parse
+            var claims = Jwts.parser()
+                    .verifyWith(Keys.hmacShaKeyFor(
+                        java.util.Base64.getDecoder().decode(secretKey)))
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload();
+            Object cid = claims.get("customerId");
+            return cid != null ? Long.parseLong(cid.toString()) : null;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public String extractType(String token) {
+        try {
+            var claims = Jwts.parser()
+                    .verifyWith(Keys.hmacShaKeyFor(
+                        java.util.Base64.getDecoder().decode(secretKey)))
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload();
+            return (String) claims.get("type");
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+NOTE: Make sure your JwtUtil.java has this field:
+    @Value("${jwt.secret}")
+    private String secretKey;
+
+And these imports at the top:
+    import io.jsonwebtoken.Jwts;
+    import io.jsonwebtoken.security.Keys;

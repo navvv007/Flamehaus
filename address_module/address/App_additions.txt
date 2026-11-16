@@ -1,0 +1,17 @@
+Add to App.jsx:
+
+1. Import:
+   import AddressPage from "./website/pages/AddressPage";
+
+2. Inside the website <Route path="/" element={<WebsiteLayout />}> block:
+   <Route path="my-addresses" element={<AddressPage />} />
+
+3. In WebsiteLayout.jsx nav or user dropdown, add a link:
+   <Link to="/my-addresses">📍 My Addresses</Link>
+
+4. In AdminOrderDetail.jsx and DeliveryDashboard.jsx, import and use:
+   import AddressDisplay from "../../admin/pages/AddressDisplay";
+   // or the correct relative path
+   <AddressDisplay order={order} />
+   // or compact mode:
+   <AddressDisplay order={order} compact />

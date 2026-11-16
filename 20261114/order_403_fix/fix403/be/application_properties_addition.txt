@@ -1,0 +1,4 @@
+# DEVELOPMENT ONLY - lets error responses carry the real message.
+# Remove (or set to never) before going live so internals are not shown to users.
+server.error.include-message=always
+server.error.include-stacktrace=never

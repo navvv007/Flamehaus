@@ -1,0 +1,17 @@
+Add to App.jsx:
+
+1. Import new pages:
+   import DeliveryEarnings    from "./delivery/pages/DeliveryEarnings";
+   import DeliveryOrderDetail from "./delivery/pages/DeliveryOrderDetail";
+
+2. Inside the /delivery route group:
+   <Route path="earnings"           element={<DeliveryEarnings />} />
+   <Route path="orders/:assignmentId" element={<DeliveryOrderDetail />} />
+
+3. In DeliveryDashboard.jsx, the history list items already link to:
+   /delivery/track/:id
+   Change those links to:
+   /delivery/orders/:id
+
+4. Add an Earnings link in DeliveryDashboard top bar:
+   <Link to="/delivery/earnings" style={{ ... }}>💰 Earnings</Link>

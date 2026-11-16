@@ -1,0 +1,26 @@
+In src/App.jsx
+
+1) Imports (top of file)
+   import DeliveryOrderDetail from "./delivery/pages/DeliveryOrderDetail";
+   import { Navigate } from "react-router-dom";      // only if Navigate is not imported yet
+
+2) Add these routes next to your other /delivery routes.
+
+   If your delivery routes use FULL paths:
+     <Route path="/delivery/orders/:assignmentId" element={<DeliveryOrderDetail />} />
+     <Route path="/delivery/track/:assignmentId"  element={<DeliveryOrderDetail />} />
+
+   If they are NESTED inside a <Route path="/delivery"> group, use relative paths:
+     <Route path="orders/:assignmentId" element={<DeliveryOrderDetail />} />
+     <Route path="track/:assignmentId"  element={<DeliveryOrderDetail />} />
+
+   Both paths load the same page, so your existing "Full View" and History links work
+   immediately, with no edit to DeliveryDashboard.jsx.
+
+3) OPTIONAL but recommended - stops ANY unknown /delivery/... URL from sending a
+   delivery partner to the website home page:
+     <Route path="/delivery/*" element={<Navigate to="/delivery/dashboard" replace />} />
+   (React Router picks the most specific route, so this only catches unknown /delivery URLs.)
+
+4) OPTIONAL tidy-up in DeliveryDashboard.jsx - Find & Replace (Ctrl+H):
+     /delivery/track/   ->   /delivery/orders/

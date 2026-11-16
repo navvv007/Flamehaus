@@ -1,0 +1,11 @@
+Add @EnableScheduling to your main Spring Boot application class:
+
+import org.springframework.scheduling.annotation.EnableScheduling;
+
+@SpringBootApplication
+@EnableScheduling          // ← add this
+public class FlamehausApiApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(FlamehausApiApplication.class, args);
+    }
+}

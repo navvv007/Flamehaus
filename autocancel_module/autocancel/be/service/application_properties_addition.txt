@@ -1,0 +1,4 @@
+# Add to application.properties:
+
+# Order delivery timeout (hours) — orders not delivered within this time are auto-cancelled
+app.order.timeout.hours=2

@@ -1,0 +1,4 @@
+Add these lines to SecurityConfig.java BEFORE .anyRequest().authenticated():
+
+// Customer addresses (requires CUSTOMER role)
+.requestMatchers("/api/customer/addresses/**").hasRole("CUSTOMER")
